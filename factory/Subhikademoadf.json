@@ -1,0 +1,9 @@
+{
+	"name": "Subhikademoadf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c8990580-7e46-43e5-8695-26c361d1360c",
+		"tenantId": "16b3c013-d300-468d-ac64-7eda0820b6d3"
+	}
+}
