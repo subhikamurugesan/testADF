@@ -61,6 +61,8 @@
 					{
 						"name": "Wait1",
 						"type": "Wait",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
