@@ -83,7 +83,7 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"body": {
-						"value": "{\n    \"title\":\"Bulk Adjustment File Validation Failed\",\n    \"message\":\"The submitted Bulk Adjustment file did not pass validation checks.\n    Please review the attached error report, correct the issues, and resubmit the file for processing.\",\n    \"color\":\"Red\",\n    \"pipelineName\":\"@{pipeline().Pipeline}\",\n    \"pipelineRunId\":\"@{pipeline().RunId}\",\n    \"time\":\"@{utcnow()}\"\n}",
+						"value": "{\n  \"title\": \"Bulk Adjustment File Validation\",\n  \"copyStatus\": \"@{activity('Copy_Data_from_Table_To_File').status}\",\n  \"copyOutput\": @{activity('Copy_Data_from_Table_To_File').output}\n}",
 						"type": "Expression"
 					}
 				}
