@@ -1,0 +1,10 @@
+{
+	"name": "AKV_Snowflake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvcegdevweu001.vault.azure.net/"
+		}
+	}
+}

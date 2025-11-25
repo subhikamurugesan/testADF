@@ -1,0 +1,32 @@
+{
+	"name": "DS_SF_MA_BULK_ADJUSTMENT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "string",
+				"defaultValue": "TBL_RAW_MA_BULK_ADJUSTMENT"
+			},
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "ATO_CEG_STAGING"
+			}
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "ATO_CEG_STAGING",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "TBL_RAW_MA_BULK_ADJUSTMENT",
+				"type": "Expression"
+			}
+		}
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"name": "DS_ADLS_BULK_BAD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1_BULK",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Bulk_Bad_Records.csv",
+				"folderPath": "Bulk_Bad",
+				"container": "bulk-adj"
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\r\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

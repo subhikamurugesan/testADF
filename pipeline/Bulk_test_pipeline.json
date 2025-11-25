@@ -1,0 +1,139 @@
+{
+	"name": "Bulk_test_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_Data_from_Table_To_File",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SnowflakeV2Source",
+						"query": {
+							"value": "select * from DEV_CEG.ATO_CEG_STAGING.TBL_RAW_MA_BULK_ADJUSTMENT where isvalid = 'BAD'",
+							"type": "Expression"
+						},
+						"exportSettings": {
+							"type": "SnowflakeExportCopyCommand"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_SF_MA_BULK_ADJUSTMENT",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "TBL_RAW_MA_BULK_ADJUSTMENT",
+							"SchemaName": "ATO_CEG_STAGING"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ADLS_BULK_BAD",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy_Data_from_Table_To_File",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-99.westeurope.logic.azure.com:443/workflows/45435bb722ff4a31a89ca7750bdbaf69/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=It_Y_nsmGaUKJ8dhjmPPYfcSxeJ96jSS5rtRDo3NNeI",
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"body": {
+						"value": "{\n    \"title\":\"Bulk Adjustment File Validation Failed\",\n    \"message\":\"The submitted Bulk Adjustment file did not pass validation checks.\n    Please review the attached error report, correct the issues, and resubmit the file for processing.\",\n    \"color\":\"Red\",\n    \"pipelineName\":\"@{pipeline().Pipeline}\",\n    \"pipelineRunId\":\"@{pipeline().RunId}\",\n    \"time\":\"@{utcnow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Web2",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy_Data_from_Table_To_File",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": {
+							"value": "application/json",
+							"type": "Expression"
+						}
+					},
+					"url": {
+						"value": "https://management.azure.com/subscriptions/137aeb28-0f48-475a-be51-58badc3f12ea/resourceGroups/rg-ceg-dev-weu-001/providers/Microsoft.DataFactory/factories/adfcegdevweu001/pipelineruns/@{pipeline().RunId}/queryActivityRuns?api-version=2018-06-01",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"body": {
+						"lastUpdatedAfter": "2025-11-24T00:00:00Z",
+						"lastUpdatedBefore": "@{utcnow()}"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://management.azure.com/"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}

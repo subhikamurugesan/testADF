@@ -1,0 +1,35 @@
+{
+	"name": "Snowflake2",
+	"properties": {
+		"annotations": [],
+		"type": "SnowflakeV2",
+		"typeProperties": {
+			"authenticationType": "KeyPair",
+			"accountIdentifier": "devtestthreemobile.west-europe.privatelink",
+			"user": "DEV_CEG_ETL_USER",
+			"database": "DEV_CEG",
+			"warehouse": "DEV_CEG_LOAD_WH",
+			"privateKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AKV_Snowflake",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "adf-ceg-etl-sa-private-key"
+			},
+			"privateKeyPassphrase": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AKV_Snowflake",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "adf-ceg-etl-sa-pk-encryption-key"
+			}
+		},
+		"version": "1.1",
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
